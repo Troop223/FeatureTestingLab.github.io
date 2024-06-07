@@ -29,9 +29,10 @@
 </style>
 </head>
 <body>
+    v1.00
     <div id="commentBox">
         <h1>Simple Comment System</h1>
-        <div id="nameInput">
+        <div id="nameInput" style="display: none;">
             <label for="name">Your Name:</label>
             <input type="text" id="name" required>
             <button id="nameSubmit">Submit</button>
@@ -90,17 +91,29 @@
             commentsDiv.appendChild(commentContainer);
         }
 
-        // Function to submit comment
-        document.getElementById('commentForm').addEventListener('submit', function(event) {
+        // Function to submit name
+        document.getElementById('nameSubmit').addEventListener('click', function(event) {
             event.preventDefault();
             
             var name = document.getElementById('name').value;
-            var comment = document.getElementById('comment').value;
             
             if(name.trim() === '') {
                 alert('Please fill in your name');
                 return;
             }
+            
+            localStorage.setItem('userName', name);
+            document.getElementById('nameInput').style.display = 'none';
+            document.getElementById('commentForm').style.display = 'block';
+        });
+
+        // Function to submit comment
+        document.getElementById('commentForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            var name = localStorage.getItem('userName');
+            var comment = document.getElementById('comment').value;
+            
             if(comment.trim() === '') {
                 alert('Please fill in the comment field');
                 return;
@@ -124,8 +137,11 @@
 
         // Load comments on page load
         window.onload = function() {
+            var storedName = localStorage.getItem('userName');
+            if (storedName) {
+                document.getElementById('nameInput').style.display = 'none';
+                document.getElementById('commentForm').style.display = 'block';
+            }
             fetchComments();
         };
     </script>
-</body>
-</html>
