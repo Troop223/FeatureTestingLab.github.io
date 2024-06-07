@@ -26,13 +26,9 @@
     #comments div span {
         font-weight: bold;
     }
-    .hidden {
-        display: none;
-    }
 </style>
 </head>
 <body>
-    v2
     <div id="commentBox">
         <h1>Simple Comment System</h1>
         <div id="nameInput" style="display: none;">
@@ -73,28 +69,24 @@
             var commentsDiv = document.getElementById('comments');
             commentsDiv.innerHTML = '';
 
-            comments.forEach(function(comment, index) {
-                if (index < 2) {
-                    appendComment(comment);
-                } else {
-                    appendComment(comment, true);
-                }
+            comments.forEach(function(comment) {
+                appendComment(comment);
             });
 
             if (comments.length > 2) {
                 var showMoreButton = document.createElement('button');
                 showMoreButton.textContent = 'Show More Comments';
                 showMoreButton.addEventListener('click', function() {
-                    showAllComments(comments);
                     showMoreButton.style.display = 'none';
                     closeCommentsButton.style.display = 'inline-block';
+                    showAllComments();
                 });
 
                 var closeCommentsButton = document.createElement('button');
                 closeCommentsButton.textContent = 'Close Comments';
                 closeCommentsButton.style.display = 'none';
                 closeCommentsButton.addEventListener('click', function() {
-                    hideAllComments(comments);
+                    hideAllComments();
                     showMoreButton.style.display = 'inline-block';
                     closeCommentsButton.style.display = 'none';
                 });
@@ -105,7 +97,7 @@
         }
 
         // Function to append comment to DOM
-        function appendComment(comment, hidden) {
+        function appendComment(comment) {
             var commentsDiv = document.getElementById('comments');
             var commentContainer = document.createElement('div');
             var nameElement = document.createElement('span');
@@ -117,30 +109,25 @@
             commentContainer.appendChild(nameElement);
             commentContainer.appendChild(commentElement);
 
-            if (hidden) {
-                commentContainer.classList.add('hidden');
-            }
-
             commentsDiv.appendChild(commentContainer);
         }
 
         // Function to show all comments
-        function showAllComments(comments) {
-            var hiddenComments = document.querySelectorAll('#comments div.hidden');
+        function showAllComments() {
+            var hiddenComments = document.querySelectorAll('#comments div');
             hiddenComments.forEach(function(comment) {
-                comment.classList.remove('hidden');
+                comment.style.display = 'block';
             });
         }
 
-        // Function to hide comments after the latest two
-        function hideAllComments(comments) {
-            var commentsDiv = document.getElementById('comments');
-            var allComments = Array.from(commentsDiv.children);
-            allComments.forEach(function(comment, index) {
-                if (index > 1 && comments.length > 2) {
-                    comment.classList.add('hidden');
+        // Function to hide all comments except latest two
+        function hideAllComments() {
+            var comments = document.querySelectorAll('#comments div');
+            for (var i = 0; i < comments.length; i++) {
+                if (i > 1) {
+                    comments[i].style.display = 'none';
                 }
-            });
+            }
         }
 
         // Function to submit name
