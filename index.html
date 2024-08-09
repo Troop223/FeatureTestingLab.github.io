@@ -1,188 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simple Comment System</title>
-<style>
-    /* CSS for styling */
-    #commentBox {
-        width: 100%;
-        max-width: 400px; /* Limiting maximum width for better readability */
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        margin: 0 auto; /* Centering the comment section horizontally */
-    }
-    #comments {
-        margin-top: 20px;
-    }
-    #comments div {
-        margin-bottom: 10px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-    #comments div span {
-        font-weight: bold;
-    }
-</style>
-</head>
+<html>
 <body>
-    <div id="commentBox">
-        <h1>Simple Comment System</h1>
-        <div id="nameInput" style="display: none;">
-            <label for="name">Your Name:</label>
-            <input type="text" id="name" required>
-            <button id="nameSubmit">Submit</button>
-        </div>
-        <form id="commentForm" style="display: none;">
-            <label for="comment">Your Comment:</label><br>
-            <textarea id="comment" rows="4" cols="50" required></textarea><br>
-            <button type="submit">Submit</button>
-        </form>
-        <div id="comments">
-            <!-- Comments will be displayed here -->
-        </div>
-    </div>
-
-    <script>
-        // Function to fetch comments from server
-        function fetchComments() {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        var comments = JSON.parse(xhr.responseText);
-                        renderComments(comments);
-                    } else {
-                        console.error('Failed to fetch comments');
-                    }
-                }
-            };
-            xhr.open('GET', 'comments.json', true);
-            xhr.send();
-        }
-
-        // Function to render comments
-        function renderComments(comments) {
-            var commentsDiv = document.getElementById('comments');
-            commentsDiv.innerHTML = '';
-
-            comments.forEach(function(comment) {
-                appendComment(comment);
-            });
-
-            if (comments.length > 2) {
-                var showMoreButton = document.createElement('button');
-                showMoreButton.textContent = 'Show More Comments';
-                showMoreButton.addEventListener('click', function() {
-                    showMoreButton.style.display = 'none';
-                    closeCommentsButton.style.display = 'inline-block';
-                    showAllComments();
-                });
-
-                var closeCommentsButton = document.createElement('button');
-                closeCommentsButton.textContent = 'Close Comments';
-                closeCommentsButton.style.display = 'none';
-                closeCommentsButton.addEventListener('click', function() {
-                    hideAllComments();
-                    showMoreButton.style.display = 'inline-block';
-                    closeCommentsButton.style.display = 'none';
-                });
-
-                commentsDiv.appendChild(showMoreButton);
-                commentsDiv.appendChild(closeCommentsButton);
-            }
-        }
-
-        // Function to append comment to DOM
-        function appendComment(comment) {
-            var commentsDiv = document.getElementById('comments');
-            var commentContainer = document.createElement('div');
-            var nameElement = document.createElement('span');
-            var commentElement = document.createElement('p');
-
-            nameElement.textContent = comment.name + ': ';
-            commentElement.textContent = comment.comment;
-
-            commentContainer.appendChild(nameElement);
-            commentContainer.appendChild(commentElement);
-
-            commentsDiv.appendChild(commentContainer);
-        }
-
-        // Function to show all comments
-        function showAllComments() {
-            var hiddenComments = document.querySelectorAll('#comments div');
-            hiddenComments.forEach(function(comment) {
-                comment.style.display = 'block';
-            });
-        }
-
-        // Function to hide all comments except latest two
-        function hideAllComments() {
-            var comments = document.querySelectorAll('#comments div');
-            for (var i = 0; i < comments.length; i++) {
-                if (i > 1) {
-                    comments[i].style.display = 'none';
-                }
-            }
-        }
-
-        // Function to submit name
-        document.getElementById('nameSubmit').addEventListener('click', function(event) {
-            event.preventDefault();
-            
-            var name = document.getElementById('name').value;
-            
-            if(name.trim() === '') {
-                alert('Please fill in your name');
-                return;
-            }
-            
-            localStorage.setItem('userName', name);
-            document.getElementById('nameInput').style.display = 'none';
-            document.getElementById('commentForm').style.display = 'block';
-        });
-
-        // Function to submit comment
-        document.getElementById('commentForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            var name = localStorage.getItem('userName');
-            var comment = document.getElementById('comment').value;
-            
-            if(comment.trim() === '') {
-                alert('Please fill in the comment field');
-                return;
-            }
-            
-            var newComment = {
-                name: name,
-                comment: comment
-            };
-
-            // Simulating server-side storage by appending to comments array
-            var comments = JSON.parse(localStorage.getItem('comments')) || [];
-            comments.unshift(newComment);
-            localStorage.setItem('comments', JSON.stringify(comments));
-
-            // Render comments
-            renderComments(comments);
-
-            document.getElementById('comment').value = ''; // Clear comment input field
-        });
-
-        // Load comments on page load
-        window.onload = function() {
-            var storedName = localStorage.getItem('userName');
-            if (storedName) {
-                document.getElementById('nameInput').style.display = 'none';
-                document.getElementById('commentForm').style.display = 'block';
-            }
-            fetchComments();
-        };
-    </script>
+<h2>DelftStack learning</h2>
+<h3>JavaScript comment box example</h3>
+<form id="myForm">
+Full name: <input id="userName" type="text" name="fname">
+<br><br>
+Email : <input id="userEmail" type="text" name="email">
+<br><br>
+<textarea id ="userComment" rows="4" cols="50" name="comment"> Enter comment here...</textarea>
+<br><br>
+<input type="button" onclick="myFunction()" value="Submit">
+</form>
+<h5>Submitted data :</h5>
+<p id="data"></p>
+<script>
+function myFunction(){
+let data = "";  let name = document.getElementById("userName").value
+let email = document.getElementById("userEmail").value
+let comment = document.getElementById("userComment").value
+ 
+data = "User name : "+name+"<br/>User email : "+email+ "<br/>User comment : "+comment
+ 
+document.getElementById("data").innerHTML = data  // display data to paragraph
+}
+</script>
 </body>
 </html>
